@@ -1,0 +1,9 @@
+biopython
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+scipy
+requests
+joblib
