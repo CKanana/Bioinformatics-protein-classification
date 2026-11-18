@@ -1,0 +1,4 @@
+model,f1_before_tuning,f1_after_tuning,best_params
+SVM (RBF),0.8634453280048275,0.9080127173373075,"{'svc__C': 10, 'svc__gamma': 0.1}"
+Random Forest,0.8248873399315876,0.8480507439829473,"{'max_depth': None, 'max_features': 'log2', 'min_samples_leaf': 4, 'n_estimators': 200}"
+Logistic Regression,0.8364916376393294,0.8391600661602542,{'logisticregression__C': 0.1}
