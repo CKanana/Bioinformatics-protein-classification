@@ -33,7 +33,62 @@ MAIN_PROPS = {
     "charge_pH7": "Charge at pH 7",
 }
 
-st.set_page_config(page_title="Kinase or transcription factor?", layout="wide")
+st.set_page_config(page_title="Kinase or transcription factor?", page_icon="🧬", layout="centered")
+
+st.markdown(
+    """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
+html, body, [class*="css"], .stApp { font-family: 'DM Sans', sans-serif; }
+.block-container { padding-top: 2rem; max-width: 880px; }
+#MainMenu, footer, header [data-testid="stToolbar"] { visibility: hidden; }
+
+.hero { background: linear-gradient(135deg,#0B3C5D 0%,#0F766E 100%); color:#fff;
+        border-radius: 20px; padding: 34px 36px 30px; margin-bottom: 14px; position:relative; overflow:hidden; }
+.hero:after { content:""; position:absolute; right:-60px; top:-60px; width:240px; height:240px;
+        border-radius:50%; background:rgba(255,255,255,.07); }
+.hero .tag { font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; opacity:.8; }
+.hero h1 { font-family:'DM Serif Display',serif; font-weight:400; font-size:2.5rem; line-height:1.1; margin:.35rem 0 .6rem; color:#fff; padding:0; }
+.hero p { font-size:.98rem; opacity:.92; max-width:640px; margin:0; line-height:1.5; }
+
+.notice { background:#FFF8E6; border:1px solid #F4D58D; color:#6B4E00; border-radius:12px;
+          padding:10px 16px; font-size:.86rem; margin-bottom:10px; }
+
+.stTabs [data-baseweb="tab-list"] { gap: 18px; }
+.stTabs button[role="tab"] p { font-size:1rem; font-weight:500; color:#4A5D70; }
+.stTabs button[role="tab"][aria-selected="true"] p { color:#0F766E; font-weight:700; }
+
+h2, h3 { font-family:'DM Serif Display',serif; font-weight:400; color:#0B3C5D; }
+.stTextArea textarea { font-family: ui-monospace, Menlo, Consolas, monospace; font-size:.9rem;
+        border-radius:14px; background:#F7FAFC; border:1.5px solid #D5E3EE; }
+.stTextArea textarea:focus { border-color:#0F766E; }
+.stButton > button { border-radius:999px; border:1.5px solid #CFE0EA; padding:.35rem 1.1rem; font-weight:500; }
+.stButton > button:hover { border-color:#0F766E; color:#0F766E; }
+.stButton > button[kind="primary"] { background:#0F766E; color:#fff; border:none; padding:.6rem 1.8rem; font-weight:700; }
+.stButton > button[kind="primary"]:hover { background:#0B5E58; color:#fff; }
+
+.result { border-radius:18px; padding:22px 26px; margin:18px 0 8px; border:1.5px solid; }
+.result.kin { background:#E8F5F3; border-color:#7CC4BA; }
+.result.tf  { background:#EAF0FB; border-color:#9DB7E8; }
+.result.unc { background:#FFF4E0; border-color:#F0C27B; }
+.result .lbl { font-size:.78rem; letter-spacing:.12em; text-transform:uppercase; color:#4A5D70; }
+.result .big { font-family:'DM Serif Display',serif; font-size:2rem; color:#0B3C5D; margin:.1rem 0 .2rem; }
+.result .sub { color:#3C4F63; font-size:.95rem; }
+
+.pbar { display:flex; height:30px; border-radius:999px; overflow:hidden; margin:14px 0 6px; font-size:.82rem; font-weight:700; color:#fff; }
+.pbar .k { background:#0F766E; display:flex; align-items:center; padding-left:14px; white-space:nowrap; }
+.pbar .t { background:#3B6FD4; display:flex; align-items:center; justify-content:flex-end; padding-right:14px; white-space:nowrap; }
+.legend { display:flex; justify-content:space-between; font-size:.8rem; color:#4A5D70; }
+
+.stat-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:8px 0 18px; }
+.stat { background:#F4F8FB; border-radius:14px; padding:14px 16px; }
+.stat .n { font-family:'DM Serif Display',serif; font-size:1.7rem; color:#0F766E; }
+.stat .d { font-size:.8rem; color:#4A5D70; }
+[data-testid="stDataFrame"] { border-radius:12px; overflow:hidden; }
+</style>
+""",
+    unsafe_allow_html=True,
+)
 
 
 # ---------- features: must match the notebook exactly ----------
@@ -76,18 +131,25 @@ def load_examples():
 bundle = load_bundle()
 
 # ---------- header ----------
-st.title("Kinase or transcription factor?")
-st.caption(
-    "Group 6 bioinformatics project | Strathmore University | "
-    "Can physicochemical properties of amino acid sequences such as hydrophobicity, molecular weight "
-    "and charge accurately predict whether a set of proteins belongs to the kinase or transcription factor family?"
+st.markdown(
+    """
+<div class="hero">
+  <div class="tag">Group 6 · Bioinformatics · Strathmore University</div>
+  <h1>Kinase or transcription factor?</h1>
+  <p>Paste a protein sequence and see whether its physicochemical profile looks like a protein kinase
+  or a transcription factor.</p>
+</div>
+<div class="notice"><b>Research use only.</b> A prediction is a statistical guess from sequence properties.
+Check it against experiments or a trusted database. Never use it for clinical, insurance or employment decisions.
+Sequences you enter are not stored.</div>
+""",
+    unsafe_allow_html=True,
 )
-st.info(
-    "For learning and research use only. A prediction is a statistical guess from sequence "
-    "properties and must be checked against experiments or a trusted database. "
-    "Never use it for clinical, insurance or employment decisions. "
-    "Sequences you enter are not stored."
-)
+with st.expander("Our research question"):
+    st.write(
+        "Can physicochemical properties of amino acid sequences such as hydrophobicity, molecular weight "
+        "and charge accurately predict whether a set of proteins belongs to the kinase or transcription factor family?"
+    )
 
 if bundle is None:
     st.error(
@@ -138,23 +200,21 @@ with tab_predict:
             p_tf = 1.0 - p_kin
 
             if UNCERTAIN_LOW <= p_kin <= UNCERTAIN_HIGH:
-                st.warning(
-                    f"Uncertain. The model puts the probability of a kinase at {p_kin:.0%}, "
-                    "which is too close to call. Treat this as no prediction."
-                )
+                cls, lbl, big = "unc", "Result", "Uncertain"
+                sub = f"The model puts the chance of a kinase at {p_kin:.0%}. That is too close to call, so treat it as no prediction."
             elif p_kin > UNCERTAIN_HIGH:
-                st.success(f"Predicted family: protein kinase ({p_kin:.0%} probability)")
+                cls, lbl, big = "kin", "Predicted family", "Protein kinase"
+                sub = f"{p_kin:.0%} probability"
             else:
-                st.success(f"Predicted family: transcription factor ({p_tf:.0%} probability)")
-
-            c1, c2 = st.columns(2)
-            c1.metric("Probability: protein kinase", f"{p_kin:.0%}")
-            c2.metric("Probability: transcription factor", f"{p_tf:.0%}")
-            st.bar_chart(
-                pd.DataFrame(
-                    {"Probability": [p_kin, p_tf]},
-                    index=["Protein kinase", "Transcription factor"],
-                )
+                cls, lbl, big = "tf", "Predicted family", "Transcription factor"
+                sub = f"{p_tf:.0%} probability"
+            st.markdown(
+                f'<div class="result {cls}"><div class="lbl">{lbl}</div><div class="big">{big}</div>'
+                f'<div class="sub">{sub}</div>'
+                f'<div class="pbar"><div class="k" style="width:{max(p_kin*100,14):.1f}%">Kinase {p_kin:.0%}</div>'
+                f'<div class="t" style="width:{max(p_tf*100,14):.1f}%">TF {p_tf:.0%}</div></div>'
+                f'<div class="legend"><span>Protein kinase</span><span>Transcription factor</span></div></div>',
+                unsafe_allow_html=True,
             )
 
             lo, hi = bundle.get("train_length_range", (None, None))
@@ -202,6 +262,13 @@ with tab_model:
         )
 
     tm = bundle.get("test_metrics")
+    if tm and "f1" in tm:
+        i = 0
+        cards = ""
+        for key, name in [("accuracy", "Accuracy"), ("recall", "Kinase recall"), ("f1", "F1 score"), ("roc_auc", "ROC-AUC")]:
+            if key in tm:
+                cards += f'<div class="stat"><div class="n">{tm[key][i]:.2f}</div><div class="d">{name}</div></div>'
+        st.markdown(f'<div class="stat-row">{cards}</div>', unsafe_allow_html=True)
     cv = bundle.get("cv_metrics")
     if tm:
         st.write("**Held-out test results** (20% of the proteins, kept aside and scored once, after tuning):")
